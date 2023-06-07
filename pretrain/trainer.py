@@ -40,13 +40,9 @@ def train_model(dataloader, epochs=2):
     print("Starting training in " + str(epochs) + " epochs")
     for epoch in range(epochs):
         step = 0
-        # setup loop with TQDM and dataloader
         loop = tqdm(dataloader, leave=True)
-
         for batch in loop:
-
             optim.zero_grad()
-
             input_ids = batch['input_ids'].to(device)
             mask = batch['attention_mask'].to(device)
             labels = batch['labels'].to(device)

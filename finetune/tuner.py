@@ -16,8 +16,6 @@ def save(model, optimizer):
 
 
 def train_model(dataloader, epochs=2):
-    print("Loading tokenizer")
-    tokenizer_srberta = RobertaTokenizerFast.from_pretrained("srberta_tokenizer")
 
     model = RobertaForMaskedLM("./srberta-model")  # randomly initialized weights
 
@@ -27,7 +25,7 @@ def train_model(dataloader, epochs=2):
 
     model.to(device)
     model.train()
-    optim = AdamW(model.parameters(), lr=1e-4)
+    optim = AdamW(model.parameters(), lr=3e-5)
     writer = SummaryWriter("./runs_v2")
 
     print("Starting training in " + str(epochs) + " epochs")
