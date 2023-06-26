@@ -3,10 +3,15 @@ from pydantic import BaseModel
 from starlette.middleware.cors import CORSMiddleware
 from transformers import pipeline, RobertaTokenizerFast
 from transformers import RobertaForMaskedLM
+import uvicorn
 
-tokenizer = RobertaTokenizerFast.from_pretrained("srberta_tokenizer")
-model = RobertaForMaskedLM.from_pretrained("./srberta_law_model")
+from transformers import AutoTokenizer, AutoModelForMaskedLM
+
+tokenizer = AutoTokenizer.from_pretrained("./SRBerta")
+
+model = AutoModelForMaskedLM.from_pretrained("./SRBerta")
 model.to('cpu')
+model.eval()
 
 class Question(BaseModel):
     sentence: str
@@ -26,6 +31,9 @@ app.add_middleware(
 @app.post("/guess")
 async def search(question: Question):
     fill = pipeline('fill-mask', model=model, tokenizer=tokenizer)
-    fill(question.sentence)
+    a = fill(question.sentence)
 
-    return fill
+    return a
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000)
